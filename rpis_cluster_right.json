@@ -6,7 +6,7 @@
             "node_name": "controler2",
             "ip": "192.168.0.151",
             "is_controller": 1,
-            "phases": [1, 2, 3, 4, 5]
+            "phases": [2, 3, 4, 5]
         },
         {
             "username": "ubuntu",

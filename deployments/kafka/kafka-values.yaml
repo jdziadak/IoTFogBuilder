@@ -1,8 +1,0 @@
-image:
-  tag: 3.3.2-debian-11-r34
-kraft:
-  enabled: false
-zookeeper:
-  enabled: true
-listeners: EXTERNAL://0.0.0.0:19092,PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
-advertisedListeners: EXTERNAL://192.168.0.154:19092,PLAINTEXT://kafka:9092

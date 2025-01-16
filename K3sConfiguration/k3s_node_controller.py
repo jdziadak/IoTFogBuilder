@@ -19,7 +19,7 @@ class K3sControllerNode(K3sNode):
         # This is probably redundant but sometimes (with VM) we skip 1st phase so there may be no curl on the node.
         # If already installed, it'll be just skipped.
         self.ssh.sudo_command("apt install -y curl")
-        self.ssh.sudo_command(f"curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=\"{k3s_version}\" K3S_KUBECONFIG_MODE=\"644\" sh -s -")
+        self.ssh.sudo_command(f"curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=\"{k3s_version}\" K3S_KUBECONFIG_MODE=\"644\" INSTALL_K3S_NAME=\"{self.node_name}\" sh -s -")
 
     def write_final_k3s_config_file(self):
         print("\tCopying k3s.yaml to config directory and setting node's IP address.")
@@ -50,7 +50,7 @@ class K3sControllerNode(K3sNode):
         self.ssh.command("rm -rf deployments")
         self.ssh.command("mkdir deployments")
 
-        deployment_directories = ['couchdb', 'kafka', 'node-red', 'scripts']
+        deployment_directories = ['scripts']
         for dir in deployment_directories:
             self.ssh.command(f"mkdir deployments/{dir}")
             for file in os.listdir(f"deployments/{dir}"):
@@ -64,7 +64,7 @@ class K3sControllerNode(K3sNode):
         self.ssh.command("./deployments/scripts/apply-deployments.sh")
 
     def uninstall_k3s(self):
-        self.ssh.sudo_command("/usr/local/bin/k3s-uninstall.sh")
+        self.ssh.sudo_command("/usr/local/bin/$(ls /usr/local/bin | grep k3s | grep uninstall)")
 
     def __str__(self):
         return f"IP: {self.ip}, name: {self.node_name} - controller"

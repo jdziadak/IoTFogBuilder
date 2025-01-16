@@ -1,0 +1,40 @@
+{
+    "k3s_version": "v1.24.6+k3s1",
+    "machines": [
+        {
+            "username": "ubuntu",
+            "node_name": "controler1",
+            "ip": "192.168.0.105",
+            "is_controller": 1,
+            "phases": [1, 2, 3, 4, 5]
+        },
+        {
+            "username": "ubuntu",
+            "node_name": "agent10",
+            "ip": "192.168.0.106",
+            "is_controller": 0,
+            "phases": [1, 2, 3, 4, 5]
+        },
+        {
+            "username": "ubuntu",
+            "node_name": "agent11",
+            "ip": "192.168.0.107",
+            "is_controller": 0,
+            "phases": [1, 2, 3, 4, 5]
+        },
+        {
+            "username": "ubuntu",
+            "node_name": "agent12",
+            "ip": "192.168.0.108",
+            "is_controller": 0,
+            "phases": [1, 2, 3, 4, 5]
+        },
+        {
+            "username": "ubuntu",
+            "node_name": "agent13",
+            "ip": "192.168.0.109",
+            "is_controller": 0,
+            "phases": [1, 2, 3, 4, 5]
+        }
+    ]
+}

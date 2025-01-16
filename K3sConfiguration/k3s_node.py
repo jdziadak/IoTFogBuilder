@@ -10,7 +10,6 @@ class K3sNode:
         self.connection_failed = False
         self.phases = phases
         self.reinstall = reinstall
-
         # SSH connection
         print(f"\tConnecting to target node {ip}")
         self.ssh = NodeSshController(ip, username, password)
@@ -89,7 +88,7 @@ class K3sNode:
         self.ssh.sudo_command("reboot")
         # Provide some idle delay for raspberry to reboot:
         # TODO remove later: 90 seconds for RPi 2, for newer can be lower (50 for 3B+)
-        self.ssh.reconnect(delay=70)
+        self.ssh.reconnect(delay=115)
 
     def install_k3s(self, k3s_version, controller_ip, controller_token):
         print('\tInstalling K3s on the worker node.')

@@ -1,0 +1,27 @@
+{
+    "_comment": "Left column in laboratory cluster",
+    "k3s_version": "v1.24.6+k3s1",
+    "machines": [
+        {
+            "username": "ubuntu",
+            "node_name": "controler",
+            "ip": "192.168.0.114",
+            "is_controller": 1,
+            "phases": [1, 2, 3, 4, 5]
+        },
+        {
+            "username": "ubuntu",
+            "node_name": "agent0",
+            "ip": "192.168.0.116",
+            "is_controller": 0,
+            "phases": [1, 2, 3, 4, 5]
+        },
+        {
+            "username": "ubuntu",
+            "node_name": "agent1",
+            "ip": "192.168.0.115",
+            "is_controller": 0,
+            "phases": [1, 2, 3, 4, 5]
+        }
+   ]
+}
