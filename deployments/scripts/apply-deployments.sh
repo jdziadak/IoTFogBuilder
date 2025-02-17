@@ -114,7 +114,7 @@ while true; do
 	 kubectl get svc -n node-red -o custom-columns='SERVICE:.metadata.name,NODEPORT:.spec.ports[*].nodePort' | grep -i '\-np' | column -t | awk '{print $1, '\t\t', $2}' 
 	 # Get services in the couchdb namespace 
 	 kubectl get svc -n couchdb -o custom-columns='SERVICE:.metadata.name,NODEPORT:.spec.ports[*].nodePort' | grep -i '\-np' | column -t | awk '{print $1, '\t\t', $2}' 
-	 INTERNAL_IP=$(kubectl get nodes -o wide --no-headers | awk '{print $6}') && printf '!!! Remember that if you want to login to CouchDB you need to go to https://%s:30984/_utils !!!\n' '$INTERNAL_IP' 
+	 printf '!!! Remember that if you want to login to CouchDB you need to go to https://IP_ADDRESS_OF_CONTROLLER:30984/_utils !!!\n' 
      # Get services in the kafka namespace 
 	 kubectl get svc -n kafka -o custom-columns='SERVICE:.metadata.name,NODEPORT:.spec.ports[*].nodePort' | grep -i '\-np' | column -t | awk '{print $1, '\t\t', $2}' 
 	 # Get services in the default namespace
