@@ -113,7 +113,7 @@ while true; do
 	 # Get services in the node-red namespace
 	 kubectl get svc -n node-red | grep -i '\-np' 
 	 # Get services in the couchdb namespace 
-	 kubectl get svc -n couchdb -o| grep -i '\-np' 
+	 kubectl get svc -n couchdb | grep -i '\-np' 
 	 printf '!!! Remember that if you want to login to CouchDB you need to go to https://IP_ADDRESS_OF_CONTROLLER:30984/_utils !!!\n' 
      # Get services in the kafka namespace 
 	 kubectl get svc -n kafka  | grep -i '\-np'  
