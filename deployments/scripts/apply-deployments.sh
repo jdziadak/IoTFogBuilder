@@ -109,16 +109,16 @@ while true; do
 
     # Print services with NodePorts
 	echo 'Listing services with NodePorts:' # Get services in the prometheus namespace 
-	 kubectl get svc -n prometheus -o custom-columns='SERVICE:.metadata.name,NODEPORT:.spec.ports[*].nodePort' | grep -i '\-np' | column -t | awk '{print $1, '\t\t', $2}'
+	 kubectl get svc -n prometheus | grep -i '\-np'
 	 # Get services in the node-red namespace
-	 kubectl get svc -n node-red -o custom-columns='SERVICE:.metadata.name,NODEPORT:.spec.ports[*].nodePort' | grep -i '\-np' | column -t | awk '{print $1, '\t\t', $2}' 
+	 kubectl get svc -n node-red | grep -i '\-np' 
 	 # Get services in the couchdb namespace 
-	 kubectl get svc -n couchdb -o custom-columns='SERVICE:.metadata.name,NODEPORT:.spec.ports[*].nodePort' | grep -i '\-np' | column -t | awk '{print $1, '\t\t', $2}' 
+	 kubectl get svc -n couchdb -o| grep -i '\-np' 
 	 printf '!!! Remember that if you want to login to CouchDB you need to go to https://IP_ADDRESS_OF_CONTROLLER:30984/_utils !!!\n' 
      # Get services in the kafka namespace 
-	 kubectl get svc -n kafka -o custom-columns='SERVICE:.metadata.name,NODEPORT:.spec.ports[*].nodePort' | grep -i '\-np' | column -t | awk '{print $1, '\t\t', $2}' 
+	 kubectl get svc -n kafka  | grep -i '\-np'  
 	 # Get services in the default namespace
-	 kubectl get svc -n default -o custom-columns='SERVICE:.metadata.name,NODEPORT:.spec.ports[*].nodePort' | grep -i '\-np' | column -t | awk '{print $1, '\t\t', $2}' 
+	 kubectl get svc -n default | grep -i '\-np'
 
     # If all pods are ready, exit the loop
     echo 'Script completed successfully.'
