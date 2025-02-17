@@ -3,10 +3,10 @@
 # Function to check if pods in a given namespace are ready
 check_pods_ready() {
     namespace=$1
-    echo "Checking readiness of pods in namespace: $namespace"
+    echo 'Checking readiness of pods in namespace: $namespace'
     kubectl wait --namespace $namespace --for=condition=ready pod --all --timeout=600s
     if [ $? -ne 0 ]; then
-        echo "Some pods in namespace $namespace are not ready. Restarting the script..."
+        echo 'Some pods in namespace $namespace are not ready. Restarting the script...'
         return 1
     fi
     return 0
@@ -46,13 +46,13 @@ while true; do
     # Apply Kafka resources for kafka namespace
     helm install zookeper -n kafka oci://registry-1.docker.io/bitnamicharts/zookeeper --version 13.7.1
     touch values-kafka.yaml
-    printf "listenerSecurityProtocolMap: 'PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT,INTERNAL:PLAINTEXT'\ninterBrokerListenerName: 'INTERNAL'\nlisteners: 'EXTERNAL://0.0.0.0:19092,PLAINTEXT://0.0.0.0:9092,INTERNAL://0.0.0.0:29092'\nadvertisedListeners: 'EXTERNAL://192.168.0.154:19092,PLAINTEXT://kafka:9092,INTERNAL://kafka:29092'\n" > values-kafka.yaml
+    printf 'listenerSecurityProtocolMap: 'PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT,INTERNAL:PLAINTEXT'\ninterBrokerListenerName: 'INTERNAL'\nlisteners: 'EXTERNAL://0.0.0.0:19092,PLAINTEXT://0.0.0.0:9092,INTERNAL://0.0.0.0:29092'\nadvertisedListeners: 'EXTERNAL://192.168.0.154:19092,PLAINTEXT://kafka:9092,INTERNAL://kafka:29092'\n' > values-kafka.yaml
     helm install -n kafka my-release-kafka bitnami/kafka --version 20.0.5 -f values-kafka.yaml
     rm values-kafka.yaml
 
     # Apply CouchDB resources
     touch values-couchdb.yaml
-    printf "adminUsername: dXNlcm5hbWU=\nadminPassword: cGFzc3dvcmQ=\ncouchdbConfig:\n  couchdb:\n    uuid: decafbaddecafbaddecafbaddecafbad\n" > values-couchdb.yaml
+    printf 'adminUsername: dXNlcm5hbWU=\nadminPassword: cGFzc3dvcmQ=\ncouchdbConfig:\n  couchdb:\n    uuid: decafbaddecafbaddecafbaddecafbad\n' > values-couchdb.yaml
     helm install -n couchdb my-couchdb couchdb/couchdb --version 4.5.6 -f values-couchdb.yaml
     rm values-couchdb.yaml
 
@@ -81,47 +81,47 @@ while true; do
 
     # Patch previously exposed services
     touch values-couchdb.yaml
-    printf "apiVersion: v1\nkind: Service\nmetadata:\n  name: couchdb-np\n  namespace: couchdb\nspec:\n  ports:\n    - nodePort: 30984\n      port: 5984\n" > values-couchdb.yaml
+    printf 'apiVersion: v1\nkind: Service\nmetadata:\n  name: couchdb-np\n  namespace: couchdb\nspec:\n  ports:\n    - nodePort: 30984\n      port: 5984\n' > values-couchdb.yaml
     kubectl apply -f values-couchdb.yaml
 
     touch values-node-red.yaml
-    printf "apiVersion: v1\nkind: Service\nmetadata:\n  name: node-red-np\n  namespace: node-red\nspec:\n  ports:\n    - nodePort: 30001\n      port: 1880\n" > values-node-red.yaml
+    printf 'apiVersion: v1\nkind: Service\nmetadata:\n  name: node-red-np\n  namespace: node-red\nspec:\n  ports:\n    - nodePort: 30001\n      port: 1880\n' > values-node-red.yaml
     kubectl apply -f values-node-red.yaml
 
     touch values-grafana.yaml
-    printf "apiVersion: v1\nkind: Service\nmetadata:\n  name: grafana-np\n  namespace: prometheus\nspec:\n  ports:\n    - nodePort: 30000\n      port: 80\n" > values-grafana.yaml
+    printf 'apiVersion: v1\nkind: Service\nmetadata:\n  name: grafana-np\n  namespace: prometheus\nspec:\n  ports:\n    - nodePort: 30000\n      port: 80\n' > values-grafana.yaml
     kubectl apply -f values-grafana.yaml
 
     touch values-rabbit.yaml
-    printf "apiVersion: v1\nkind: Service\nmetadata:\n  name: rabbit-np\nspec:\n  ports:\n    - nodePort: 31000\n      port: 15672\n" > values-rabbit.yaml
+    printf 'apiVersion: v1\nkind: Service\nmetadata:\n  name: rabbit-np\nspec:\n  ports:\n    - nodePort: 31000\n      port: 15672\n' > values-rabbit.yaml
     kubectl apply -f values-rabbit.yaml
 
     rm values-rabbit.yaml values-grafana.yaml values-node-red.yaml values-couchdb.yaml
 
     # Wait for resources in each namespace to be ready
-    check_pods_ready "kafka" || continue
-    check_pods_ready "couchdb" || continue
-    check_pods_ready "prometheus" || continue
-    check_pods_ready "node-red" || continue
-    check_pods_ready "default" || continue
+    check_pods_ready 'kafka' || continue
+    check_pods_ready 'couchdb' || continue
+    check_pods_ready 'prometheus' || continue
+    check_pods_ready 'node-red' || continue
+    check_pods_ready 'default' || continue
 
-    echo "All resources are ready!"
+    echo 'All resources are ready!'
 
     # Print services with NodePorts
-	echo "Listing services with NodePorts:" # Get services in the prometheus namespace 
-	 kubectl get svc -n prometheus -o custom-columns="SERVICE:.metadata.name,NODEPORT:.spec.ports[*].nodePort" | grep -i '\-np' | column -t | awk '{print $1, "\t\t", $2}'
+	echo 'Listing services with NodePorts:' # Get services in the prometheus namespace 
+	 kubectl get svc -n prometheus -o custom-columns='SERVICE:.metadata.name,NODEPORT:.spec.ports[*].nodePort' | grep -i '\-np' | column -t | awk '{print $1, '\t\t', $2}'
 	 # Get services in the node-red namespace
-	 kubectl get svc -n node-red -o custom-columns="SERVICE:.metadata.name,NODEPORT:.spec.ports[*].nodePort" | grep -i '\-np' | column -t | awk '{print $1, "\t\t", $2}' 
+	 kubectl get svc -n node-red -o custom-columns='SERVICE:.metadata.name,NODEPORT:.spec.ports[*].nodePort' | grep -i '\-np' | column -t | awk '{print $1, '\t\t', $2}' 
 	 # Get services in the couchdb namespace 
-	 kubectl get svc -n couchdb -o custom-columns="SERVICE:.metadata.name,NODEPORT:.spec.ports[*].nodePort" | grep -i '\-np' | column -t | awk '{print $1, "\t\t", $2}' 
-	 INTERNAL_IP=$(kubectl get nodes -o wide --no-headers | awk '{print $6}') && printf "!!! Remember that if you want to login to CouchDB you need to go to https://%s:30984/_utils !!!\n" "$INTERNAL_IP" 
+	 kubectl get svc -n couchdb -o custom-columns='SERVICE:.metadata.name,NODEPORT:.spec.ports[*].nodePort' | grep -i '\-np' | column -t | awk '{print $1, '\t\t', $2}' 
+	 INTERNAL_IP=$(kubectl get nodes -o wide --no-headers | awk '{print $6}') && printf '!!! Remember that if you want to login to CouchDB you need to go to https://%s:30984/_utils !!!\n' '$INTERNAL_IP' 
      # Get services in the kafka namespace 
-	 kubectl get svc -n kafka -o custom-columns="SERVICE:.metadata.name,NODEPORT:.spec.ports[*].nodePort" | grep -i '\-np' | column -t | awk '{print $1, "\t\t", $2}' 
+	 kubectl get svc -n kafka -o custom-columns='SERVICE:.metadata.name,NODEPORT:.spec.ports[*].nodePort' | grep -i '\-np' | column -t | awk '{print $1, '\t\t', $2}' 
 	 # Get services in the default namespace
-	 kubectl get svc -n default -o custom-columns="SERVICE:.metadata.name,NODEPORT:.spec.ports[*].nodePort" | grep -i '\-np' | column -t | awk '{print $1, "\t\t", $2}' 
+	 kubectl get svc -n default -o custom-columns='SERVICE:.metadata.name,NODEPORT:.spec.ports[*].nodePort' | grep -i '\-np' | column -t | awk '{print $1, '\t\t', $2}' 
 
     # If all pods are ready, exit the loop
-    echo "Script completed successfully."
+    echo 'Script completed successfully.'
     exit 0
 done
 
